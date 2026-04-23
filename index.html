@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ES Salon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #101320;
+    --navy-mid: #1a1f35;
+    --gold: #ADAA6A;
+    --gold-light: #ccc89a;
+    --cream: #f8f6f1;
+    --white: #ffffff;
+    --text-dark: #1a1a2e;
+    --text-mid: #4a4a5a;
+    --text-light: #8a8a9a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    color: var(--text-dark);
+    background: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5vw;
+    height: 72px;
+    background: rgba(16, 19, 32, 0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(173,170,106,0.15);
+    transition: height 0.3s;
+  }
+  nav.scrolled { height: 60px; }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  .btn-book {
+    display: inline-block;
+    padding: 0.6rem 1.6rem;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.25s, transform 0.15s;
+  }
+  .btn-book:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 24px; height: 1.5px;
+    background: rgba(255,255,255,0.8);
+    transition: 0.3s;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    height: 100vh;
+    min-height: 600px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--navy);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, rgba(16,19,32,0.85) 0%, rgba(16,19,32,0.4) 60%),
+      repeating-linear-gradient(
+        45deg,
+        rgba(173,170,106,0.04) 0px,
+        rgba(173,170,106,0.04) 1px,
+        transparent 1px,
+        transparent 40px
+      );
+  }
+
+  .hero-content {
+    position: relative;
+    text-align: center;
+    color: var(--white);
+    padding: 0 2rem;
+    animation: fadeUp 1.2s ease both;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.4rem;
+    font-weight: 400;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(4rem, 10vw, 8rem);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    margin-bottom: 1.4rem;
+    color: var(--white);
+  }
+
+  .hero-title span { color: var(--gold); font-style: italic; }
+
+  .hero-sub {
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 3rem;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .hero-cta { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; }
+
+  .btn-outline {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    border: 1px solid rgba(173,170,106,0.5);
+    color: rgba(255,255,255,0.85);
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: border-color 0.25s, color 0.25s;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .hero-scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, var(--gold));
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* ── SECTION WRAPPER ── */
+  section { padding: 7rem 5vw; }
+
+  .section-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--navy);
+    margin-bottom: 1.5rem;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  .section-body {
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-mid);
+    max-width: 560px;
+  }
+
+  /* ── SERVICES ── */
+  #services { background: var(--cream); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2px;
+    margin-top: 4rem;
+  }
+
+  .service-card {
+    background: var(--white);
+    padding: 3rem 2.5rem;
+    border-top: 2px solid transparent;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    cursor: default;
+  }
+  .service-card:hover {
+    border-top-color: var(--gold);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(16,19,32,0.08);
+  }
+
+  .service-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1.8rem;
+  }
+
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--navy);
+    margin-bottom: 0.4rem;
+  }
+
+  .service-name-en {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+
+  .service-desc {
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: var(--text-mid);
+    font-weight: 300;
+    margin-bottom: 2rem;
+  }
+
+  .service-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--text-mid);
+    border-top: 1px solid rgba(0,0,0,0.07);
+    padding-top: 1.2rem;
+  }
+  .service-price strong { color: var(--navy); font-weight: 500; }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--navy);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    padding: 7rem 8vw;
+  }
+
+  #about .section-title { color: var(--white); }
+  #about .section-body { color: rgba(255,255,255,0.6); }
+
+  .about-img-wrap {
+    position: relative;
+    aspect-ratio: 3/4;
+    max-height: 600px;
+  }
+
+  .about-img-placeholder {
+    width: 100%;
+    height: 100%;
+    background:
+      repeating-linear-gradient(
+        -45deg,
+        rgba(173,170,106,0.07) 0px,
+        rgba(173,170,106,0.07) 1px,
+        transparent 1px,
+        transparent 28px
+      ),
+      var(--navy-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.8rem;
+    font-family: monospace;
+    font-size: 0.7rem;
+    color: rgba(173,170,106,0.35);
+    letter-spacing: 0.1em;
+  }
+
+  .about-frame {
+    position: absolute;
+    top: -1.5rem;
+    left: -1.5rem;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    border: 1px solid rgba(173,170,106,0.25);
+    pointer-events: none;
+  }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* ── GALLERY ── */
+  #gallery { background: var(--white); }
+
+  .gallery-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 280px 200px;
+    gap: 3px;
+  }
+
+  .gallery-item {
+    overflow: hidden;
+    position: relative;
+    background: var(--cream);
+    cursor: pointer;
+  }
+
+  .gallery-item:nth-child(1) { grid-column: 1 / 6; grid-row: 1 / 2; }
+  .gallery-item:nth-child(2) { grid-column: 6 / 9; grid-row: 1 / 2; }
+  .gallery-item:nth-child(3) { grid-column: 9 / 13; grid-row: 1 / 3; }
+  .gallery-item:nth-child(4) { grid-column: 1 / 4; grid-row: 2 / 3; }
+  .gallery-item:nth-child(5) { grid-column: 4 / 9; grid-row: 2 / 3; }
+
+  .gallery-ph {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: transform 0.6s ease;
+    font-family: monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .gallery-item:hover .gallery-ph { transform: scale(1.04); }
+
+  .gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(16,19,32,0);
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .gallery-item:hover .gallery-overlay { background: rgba(16,19,32,0.35); }
+  .gallery-overlay-text {
+    color: var(--gold);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .gallery-item:hover .gallery-overlay-text { opacity: 1; transform: translateY(0); }
+
+  .gph-1 { background: repeating-linear-gradient(30deg, #e8e4dc 0, #e8e4dc 1px, #ede9e1 1px, #ede9e1 22px); color: #888; }
+  .gph-2 { background: repeating-linear-gradient(-45deg, #d4d0c8 0, #d4d0c8 1px, #dbd7cf 1px, #dbd7cf 18px); color: #777; }
+  .gph-3 { background: repeating-linear-gradient(60deg, #c8c4bb 0, #c8c4bb 1px, #d2cec5 1px, #d2cec5 24px); color: #666; }
+  .gph-4 { background: repeating-linear-gradient(-30deg, #e0ddd5 0, #e0ddd5 1px, #e6e3db 1px, #e6e3db 20px); color: #888; }
+  .gph-5 { background: repeating-linear-gradient(15deg, #dbd8d0 0, #dbd8d0 1px, #e2dfd7 1px, #e2dfd7 26px); color: #777; }
+
+  /* ── BOOKING ── */
+  #booking {
+    background: var(--cream);
+    text-align: center;
+  }
+  #booking .section-title { margin: 0 auto 1rem; }
+  #booking .section-body { margin: 0 auto 3rem; text-align: center; }
+
+  .booking-widget {
+    max-width: 680px;
+    margin: 0 auto;
+    background: var(--white);
+    padding: 3rem;
+    box-shadow: 0 4px 60px rgba(16,19,32,0.06);
+  }
+
+  .booking-steps {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 2.5rem;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    position: relative;
+  }
+
+  .step::after {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    right: -50%;
+    height: 1px;
+    background: rgba(0,0,0,0.1);
+    z-index: 0;
+  }
+  .step:last-child::after { display: none; }
+
+  .step-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-light);
+    position: relative;
+    z-index: 1;
+    background: var(--white);
+    transition: 0.3s;
+  }
+  .step.active .step-num {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy);
+  }
+  .step.done .step-num {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+
+  .step-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-light);
+  }
+  .step.active .step-label { color: var(--navy); font-weight: 500; }
+
+  .booking-panel { display: none; }
+  .booking-panel.active { display: block; animation: fadeUp 0.4s ease both; }
+
+  .booking-panel h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--navy);
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  .service-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+  }
+
+  .service-opt {
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 1.2rem;
+    cursor: pointer;
+    text-align: left;
+    transition: 0.25s;
+    background: none;
+    width: 100%;
+    font-family: 'Jost', sans-serif;
+  }
+  .service-opt:hover { border-color: var(--gold); }
+  .service-opt.selected { border-color: var(--gold); background: rgba(173,170,106,0.06); }
+
+  .service-opt-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    color: var(--navy);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  .service-opt-sub { font-size: 0.72rem; color: var(--text-light); letter-spacing: 0.06em; }
+
+  .date-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 2rem;
+  }
+  .date-day-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+  .date-cell {
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.82rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: 0.2s;
+    color: var(--text-dark);
+  }
+  .date-cell:hover:not(.empty):not(.past) { border-color: var(--gold); }
+  .date-cell.selected { background: var(--navy); color: var(--white); }
+  .date-cell.empty, .date-cell.past { color: rgba(0,0,0,0.2); cursor: default; }
+  .date-cell.today { color: var(--gold); font-weight: 500; }
+
+  .time-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+  }
+  .time-slot {
+    padding: 0.7rem;
+    border: 1px solid rgba(0,0,0,0.1);
+    font-size: 0.82rem;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+    color: var(--text-dark);
+    background: none;
+    font-family: 'Jost', sans-serif;
+  }
+  .time-slot:hover:not(.booked) { border-color: var(--gold); }
+  .time-slot.selected { background: var(--navy); color: var(--white); border-color: var(--navy); }
+  .time-slot.booked { color: rgba(0,0,0,0.2); cursor: default; text-decoration: line-through; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+  .form-group label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-mid); }
+  .form-group input, .form-group textarea {
+    border: 1px solid rgba(0,0,0,0.12);
+    padding: 0.8rem 1rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    background: none;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--gold); }
+
+  .booking-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+  .btn-prev {
+    background: none;
+    border: 1px solid rgba(0,0,0,0.15);
+    padding: 0.7rem 1.8rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--text-mid);
+    transition: 0.2s;
+  }
+  .btn-prev:hover { border-color: var(--navy); color: var(--navy); }
+
+  .booking-success {
+    text-align: center;
+    padding: 3rem 1rem;
+    display: none;
+  }
+  .success-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(173,170,106,0.12);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 1.5rem;
+    color: var(--gold);
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    background: var(--navy);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+    padding: 7rem 8vw;
+  }
+  #contact .section-title { color: var(--white); }
+
+  .contact-items { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 2rem; }
+
+  .contact-item { display: flex; align-items: flex-start; gap: 1.2rem; }
+
+  .contact-icon-wrap {
+    width: 40px; height: 40px;
+    border: 1px solid rgba(173,170,106,0.3);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .contact-icon-wrap svg { width: 16px; height: 16px; stroke: var(--gold); fill: none; }
+
+  .contact-item-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 0.3rem;
+  }
+  .contact-item-value {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.8);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .map-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background:
+      repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.03) 0px,
+        rgba(255,255,255,0.03) 1px,
+        transparent 1px,
+        transparent 28px
+      ),
+      rgba(255,255,255,0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.8rem;
+    font-family: monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: rgba(173,170,106,0.3);
+    border: 1px solid rgba(173,170,106,0.1);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0a0d18;
+    padding: 2rem 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    color: rgba(173,170,106,0.6);
+    letter-spacing: 0.12em;
+  }
+  .footer-copy {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.08em;
+  }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.1); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      inset: 72px 0 0;
+      background: rgba(16,19,32,0.98);
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      z-index: 99;
+    }
+    .nav-links.open a { font-size: 1.1rem; }
+    .nav-hamburger { display: flex; }
+    nav .btn-book { display: none; }
+
+    #about {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      padding: 5rem 5vw;
+    }
+    .about-img-wrap { max-height: 400px; }
+
+    #contact {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      padding: 5rem 5vw;
+    }
+
+    .gallery-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(3, 200px);
+    }
+    .gallery-item:nth-child(1) { grid-column: 1 / 3; grid-row: 1; }
+    .gallery-item:nth-child(2) { grid-column: 1 / 2; grid-row: 2; }
+    .gallery-item:nth-child(3) { grid-column: 2 / 3; grid-row: 2 / 4; }
+    .gallery-item:nth-child(4) { grid-column: 1 / 2; grid-row: 3; }
+    .gallery-item:nth-child(5) { display: none; }
+
+    .form-row { grid-template-columns: 1fr; }
+    .time-grid { grid-template-columns: repeat(3, 1fr); }
+    .service-options { grid-template-columns: 1fr; }
+
+    .about-stats { grid-template-columns: 1fr 1fr; }
+    .booking-widget { padding: 2rem 1.5rem; }
+    section { padding: 5rem 5vw; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">ES</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#services">Storitve</a></li>
+    <li><a href="#about">O nas</a></li>
+    <li><a href="#gallery">Galerija</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+  <a href="#booking" class="btn-book">Naroči se</a>
+  <div class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Ljubljana · Premium Salon</p>
+    <h1 class="hero-title">ES <span>Salon</span></h1>
+    <p class="hero-sub">"Stil, ki poudari vašo lepoto."</p>
+    <div class="hero-cta">
+      <a href="#booking" class="btn-book" style="padding: 0.85rem 2.4rem; font-size: 0.82rem;">Naroči se</a>
+      <a href="#services" class="btn-outline">Naše storitve</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span>Odkrijte</span>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="reveal">
+    <span class="section-label">Naše storitve</span>
+    <h2 class="section-title">Umetnost <em>lepih las</em></h2>
+    <p class="section-body">Vsaka stranka zasluži individualno obravnavo. Naši strokovnjaki združujejo tehnično znanje z estetskim čutom za popoln rezultat.</p>
+  </div>
+
+  <div class="services-grid reveal" style="transition-delay: 0.15s">
+
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 6 C18 6 12 12 12 20 C12 30 18 36 24 42 C30 36 36 30 36 20 C36 12 30 6 24 6Z" stroke="#ADAA6A" stroke-width="1.2" fill="none"/>
+        <path d="M24 14 L24 30 M18 20 L30 20" stroke="#ADAA6A" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <h3 class="service-name">Striženje</h3>
+      <span class="service-name-en">Haircut</span>
+      <p class="service-desc">Precizni rezi, prilagojeni obliki vašega obraza in osebnem slogu. Od klasičnih do sodobnih rezov — vsak z natančnostjo in strokovnostjo.</p>
+      <div class="service-price">Od <strong>25 €</strong> · 45–60 min</div>
+    </div>
+
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="14" stroke="#ADAA6A" stroke-width="1.2"/>
+        <path d="M16 24 Q20 18 24 24 Q28 30 32 24" stroke="#ADAA6A" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+        <circle cx="24" cy="24" r="3" stroke="#ADAA6A" stroke-width="1.2"/>
+      </svg>
+      <h3 class="service-name">Barvanje</h3>
+      <span class="service-name-en">Hair Coloring</span>
+      <p class="service-desc">Polna barva, balayage, highlights ali korekcija — uporabljamo izključno premium barve za živo, obstojno in vaš barvi las prijazno barvanje.</p>
+      <div class="service-price">Od <strong>55 €</strong> · 90–180 min</div>
+    </div>
+
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 34 Q24 8 34 34" stroke="#ADAA6A" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <path d="M18 28 Q24 16 30 28" stroke="#ADAA6A" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <line x1="24" y1="36" x2="24" y2="42" stroke="#ADAA6A" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <h3 class="service-name">Nega las</h3>
+      <span class="service-name-en">Hair Treatment</span>
+      <p class="service-desc">Regeneracijske maske, keratinska nega in globinska hidratacija. Obnovite sijaj in zdravje vaših las s profesionalnimi tretmaji.</p>
+      <div class="service-price">Od <strong>35 €</strong> · 30–60 min</div>
+    </div>
+
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 20 Q24 10 36 20 Q36 32 24 40 Q12 32 12 20Z" stroke="#ADAA6A" stroke-width="1.2" fill="none"/>
+        <path d="M20 24 L23 27 L28 21" stroke="#ADAA6A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h3 class="service-name">Frizura</h3>
+      <span class="service-name-en">Styling</span>
+      <p class="service-desc">Svečane frizure, blow-dry styling in vsakodnevne ureditve. Naredite vtis na vsaki priložnosti z ekspertnim stilingom.</p>
+      <div class="service-price">Od <strong>30 €</strong> · 30–90 min</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-img-wrap reveal">
+    <div class="about-img-placeholder">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="24" height="24" stroke="rgba(173,170,106,0.3)" stroke-width="1"/><line x1="4" y1="28" x2="28" y2="4" stroke="rgba(173,170,106,0.3)" stroke-width="1"/></svg>
+      <span>fotografija salona</span>
+    </div>
+    <div class="about-frame"></div>
+  </div>
+  <div class="reveal" style="transition-delay: 0.1s">
+    <span class="section-label">O nas</span>
+    <h2 class="section-title">Strast do <em>popolnosti</em></h2>
+    <p class="section-body">ES Salon je bil rojen iz prepričanja, da vsaka stranka zasluži individualno pozornost in izkušnjo, ki jo navdihne. Naš tim izkušenih stilistov neprestano izpopolnjuje svoje veščine in sledi najnovejšim trendom svetovne frizerske industrije.</p>
+    <p class="section-body" style="margin-top: 1rem;">V sproščenem, a profesionalnem okolju skrbimo za vaše lase z mero in razkošjem, ki si ga zaslužite.</p>
+    <div class="about-stats">
+      <div>
+        <div class="stat-num">8+</div>
+        <div class="stat-label">Let izkušenj</div>
+      </div>
+      <div>
+        <div class="stat-num">1.2k</div>
+        <div class="stat-label">Zadovoljnih strank</div>
+      </div>
+      <div>
+        <div class="stat-num">3</div>
+        <div class="stat-label">Nagrade</div>
+      </div>
+      <div>
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Premium izdelki</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="gallery-header reveal">
+    <div>
+      <span class="section-label">Galerija</span>
+      <h2 class="section-title" style="margin-bottom: 0">Naše <em>delo</em></h2>
+    </div>
+    <a href="#booking" class="btn-outline" style="color: var(--navy); border-color: rgba(0,0,0,0.15);">Rezerviraj termin</a>
+  </div>
+  <div class="gallery-grid reveal" style="transition-delay: 0.1s">
+    <div class="gallery-item">
+      <div class="gallery-ph gph-1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" stroke="rgba(0,0,0,0.2)" stroke-width="0.8"/><line x1="2" y1="22" x2="22" y2="2" stroke="rgba(0,0,0,0.2)" stroke-width="0.8"/></svg>balayage · naravni odtenki</div>
+      <div class="gallery-overlay"><span class="gallery-overlay-text">Poglej več</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-ph gph-2"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" stroke="rgba(0,0,0,0.15)" stroke-width="0.8"/><line x1="2" y1="22" x2="22" y2="2" stroke="rgba(0,0,0,0.15)" stroke-width="0.8"/></svg>precizen rez · bob</div>
+      <div class="gallery-overlay"><span class="gallery-overlay-text">Poglej več</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-ph gph-3"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" stroke="rgba(0,0,0,0.15)" stroke-width="0.8"/><line x1="2" y1="22" x2="22" y2="2" stroke="rgba(0,0,0,0.15)" stroke-width="0.8"/></svg>barvanje · highlights</div>
+      <div class="gallery-overlay"><span class="gallery-overlay-text">Poglej več</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-ph gph-4"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" stroke="rgba(0,0,0,0.15)" stroke-width="0.8"/><line x1="2" y1="22" x2="22" y2="2" stroke="rgba(0,0,0,0.15)" stroke-width="0.8"/></svg>svečana frizura</div>
+      <div class="gallery-overlay"><span class="gallery-overlay-text">Poglej več</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-ph gph-5"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" stroke="rgba(0,0,0,0.15)" stroke-width="0.8"/><line x1="2" y1="22" x2="22" y2="2" stroke="rgba(0,0,0,0.15)" stroke-width="0.8"/></svg>nega las · keratinski tretma</div>
+      <div class="gallery-overlay"><span class="gallery-overlay-text">Poglej več</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="reveal">
+    <span class="section-label">Rezervacija</span>
+    <h2 class="section-title">Naroči se <em>online</em></h2>
+    <p class="section-body">Izberite storitev, datum in čas — hitro in enostavno. Potrditev prejmete takoj na vaš e-mail.</p>
+  </div>
+
+  <div class="booking-widget reveal" style="transition-delay: 0.1s">
+    <div class="booking-steps">
+      <div class="step active" id="step1"><div class="step-num">1</div><div class="step-label">Storitev</div></div>
+      <div class="step" id="step2"><div class="step-num">2</div><div class="step-label">Termin</div></div>
+      <div class="step" id="step3"><div class="step-num">3</div><div class="step-label">Podatki</div></div>
+    </div>
+
+    <!-- Panel 1: Service -->
+    <div class="booking-panel active" id="panel1">
+      <h3>Izberite storitev</h3>
+      <div class="service-options">
+        <button class="service-opt" onclick="selectService(this, 'Striženje')">
+          <span class="service-opt-name">Striženje</span>
+          <span class="service-opt-sub">od 25 € · 45–60 min</span>
+        </button>
+        <button class="service-opt" onclick="selectService(this, 'Barvanje')">
+          <span class="service-opt-name">Barvanje</span>
+          <span class="service-opt-sub">od 55 € · 90–180 min</span>
+        </button>
+        <button class="service-opt" onclick="selectService(this, 'Nega las')">
+          <span class="service-opt-name">Nega las</span>
+          <span class="service-opt-sub">od 35 € · 30–60 min</span>
+        </button>
+        <button class="service-opt" onclick="selectService(this, 'Frizura')">
+          <span class="service-opt-name">Frizura</span>
+          <span class="service-opt-sub">od 30 € · 30–90 min</span>
+        </button>
+      </div>
+      <div class="booking-nav">
+        <div></div>
+        <button class="btn-book" onclick="nextStep(2)" id="nextBtn1" disabled style="opacity:0.4">Naprej →</button>
+      </div>
+    </div>
+
+    <!-- Panel 2: Date & Time -->
+    <div class="booking-panel" id="panel2">
+      <h3>Izberite datum</h3>
+      <div class="date-grid" id="dateGrid"></div>
+      <h3 style="margin-top: 1.5rem">Izberite čas</h3>
+      <div class="time-grid" id="timeGrid"></div>
+      <div class="booking-nav">
+        <button class="btn-prev" onclick="nextStep(1)">← Nazaj</button>
+        <button class="btn-book" onclick="nextStep(3)" id="nextBtn2" disabled style="opacity:0.4">Naprej →</button>
+      </div>
+    </div>
+
+    <!-- Panel 3: Contact -->
+    <div class="booking-panel" id="panel3">
+      <h3>Vaši podatki</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Ime</label><input type="text" placeholder="Ana"></div>
+        <div class="form-group"><label>Priimek</label><input type="text" placeholder="Novak"></div>
+      </div>
+      <div class="form-group"><label>Telefon</label><input type="tel" placeholder="+386 40 000 000"></div>
+      <div class="form-group"><label>E-mail</label><input type="email" placeholder="ana@email.com"></div>
+      <div class="booking-nav">
+        <button class="btn-prev" onclick="nextStep(2)">← Nazaj</button>
+        <button class="btn-book" onclick="confirmBooking()" style="padding: 0.7rem 1.8rem">Potrdi rezervacijo</button>
+      </div>
+    </div>
+
+    <!-- Success -->
+    <div class="booking-success" id="bookingSuccess">
+      <div class="success-icon">✓</div>
+      <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:300; color:var(--navy); margin-bottom:0.8rem;">Rezervacija potrjena!</h3>
+      <p style="color:var(--text-mid); font-size:0.9rem; line-height:1.7; margin-bottom:1.5rem;">Zahvaljujemo se za vašo rezervacijo. Podrobnosti ste prejeli na vaš e-mail naslov.</p>
+      <button class="btn-book" onclick="resetBooking()">Nova rezervacija</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="reveal">
+    <span class="section-label">Kontakt</span>
+    <h2 class="section-title">Obiščite <em>nas</em></h2>
+    <div class="contact-items">
+      <div class="contact-item">
+        <div class="contact-icon-wrap">
+          <svg viewBox="0 0 24 24" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">Naslov</div>
+          <div class="contact-item-value">Gosposvetska cesta 5<br>1000 Ljubljana</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon-wrap">
+          <svg viewBox="0 0 24 24" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.28h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.87a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">Telefon</div>
+          <div class="contact-item-value">+386 1 234 56 78</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon-wrap">
+          <svg viewBox="0 0 24 24" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">E-mail</div>
+          <div class="contact-item-value">info@essalon.si</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon-wrap">
+          <svg viewBox="0 0 24 24" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">Delovni čas</div>
+          <div class="contact-item-value">Pon–Pet: 9:00–19:00<br>Sob: 9:00–15:00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="reveal" style="transition-delay: 0.1s">
+    <div class="map-placeholder">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 4 C11 4 7 8 7 13 C7 20 16 28 16 28 C16 28 25 20 25 13 C25 8 21 4 16 4Z" stroke="rgba(173,170,106,0.4)" stroke-width="1" fill="none"/><circle cx="16" cy="13" r="3" stroke="rgba(173,170,106,0.4)" stroke-width="1" fill="none"/></svg>
+      <span>Gosposvetska cesta 5, Ljubljana</span>
+      <span style="font-size:0.6rem; opacity:0.6">mapa · Google Maps integracija</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ES Salon</div>
+  <div class="footer-copy">© 2026 ES Salon · Vse pravice pridržane</div>
+  <div class="footer-links">
+    <a href="#">Instagram</a>
+    <a href="#">Facebook</a>
+    <a href="#">Zasebnost</a>
+  </div>
+</footer>
+
+<script>
+// NAV scroll effect
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// Mobile menu
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── BOOKING ──
+let selectedService = null;
+let selectedDate = null;
+let selectedTime = null;
+
+function selectService(btn, name) {
+  document.querySelectorAll('.service-opt').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedService = name;
+  const nb = document.getElementById('nextBtn1');
+  nb.disabled = false;
+  nb.style.opacity = '1';
+}
+
+function nextStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('panel'+i).classList.toggle('active', i===n);
+    const s = document.getElementById('step'+i);
+    s.classList.toggle('active', i===n);
+    s.classList.toggle('done', i<n);
+  });
+  if (n===2) buildCalendar();
+}
+
+function buildCalendar() {
+  const grid = document.getElementById('dateGrid');
+  const days = ['Ned','Pon','Tor','Sre','Čet','Pet','Sob'];
+  const today = new Date();
+  const year = today.getFullYear(), month = today.getMonth();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+
+  grid.innerHTML = days.map(d => `<div class="date-day-label">${d}</div>`).join('');
+
+  for (let i = 0; i < firstDay; i++) grid.innerHTML += `<div class="date-cell empty"></div>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const isPast = d < today.getDate();
+    const isToday = d === today.getDate();
+    const isSun = (firstDay + d - 1) % 7 === 0;
+    const cls = isPast || isSun ? 'past' : isToday ? 'today' : '';
+    grid.innerHTML += `<div class="date-cell ${cls}" onclick="selectDate(this, ${d})">${d}</div>`;
+  }
+
+  buildTimes();
+}
+
+function selectDate(el, d) {
+  if (el.classList.contains('past') || el.classList.contains('empty')) return;
+  document.querySelectorAll('.date-cell').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedDate = d;
+  checkStep2();
+}
+
+const booked = [10, 11, 14];
+
+function buildTimes() {
+  const times = ['9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
+  document.getElementById('timeGrid').innerHTML = times.map((t,i) =>
+    `<button class="time-slot ${booked.includes(i)?'booked':''}" onclick="selectTime(this,'${t}')">${t}</button>`
+  ).join('');
+}
+
+function selectTime(el, t) {
+  if (el.classList.contains('booked')) return;
+  document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTime = t;
+  checkStep2();
+}
+
+function checkStep2() {
+  const nb = document.getElementById('nextBtn2');
+  const ok = selectedDate && selectedTime;
+  nb.disabled = !ok;
+  nb.style.opacity = ok ? '1' : '0.4';
+}
+
+function confirmBooking() {
+  ['panel1','panel2','panel3'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById('bookingSuccess').style.display = 'block';
+  document.querySelector('.booking-steps').style.display = 'none';
+}
+
+function resetBooking() {
+  selectedService = selectedDate = selectedTime = null;
+  document.getElementById('bookingSuccess').style.display = 'none';
+  document.querySelector('.booking-steps').style.display = 'flex';
+  document.querySelectorAll('.service-opt').forEach(b => b.classList.remove('selected'));
+  nextStep(1);
+  const nb = document.getElementById('nextBtn1');
+  nb.disabled = true; nb.style.opacity = '0.4';
+}
+</script>
+</body>
+</html>
