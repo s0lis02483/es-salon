@@ -981,6 +981,19 @@
       <div class="gallery-item"><img src="gallery-8.png" alt="Frizerski salon"></div>
     </div>
   </div>
+
+  <div class="gallery-carousel reveal" style="transition-delay: 0.2s; margin-top: 6px;">
+    <div class="gallery-track" id="nailsTrack">
+      <div class="gallery-item"><img src="nails-1.png" alt="Nohti"></div>
+      <div class="gallery-item"><img src="nails-2.png" alt="Nohti"></div>
+      <div class="gallery-item"><img src="nails-3.png" alt="Nohti"></div>
+      <div class="gallery-item"><img src="nails-4.png" alt="Nohti"></div>
+      <div class="gallery-item"><img src="nails-5.png" alt="Nohti"></div>
+      <div class="gallery-item"><img src="nails-6.png" alt="Nohti"></div>
+      <div class="gallery-item"><img src="nails-7.png" alt="Nohti"></div>
+      <div class="gallery-item"><img src="nails-8.png" alt="Nohti"></div>
+    </div>
+  </div>
 </section>
 
 <!-- BOOKING -->
@@ -1234,39 +1247,55 @@ function resetBooking() {
   nb.disabled = true; nb.style.opacity = '0.4';
 }
 
-// ── GALLERY CAROUSEL ──
-(function() {
-  const track = document.getElementById('galleryTrack');
-  if (!track) return;
-
-  // Clone all items for infinite loop
+// ── GALLERY CAROUSELS ──
+function makeCarousel(trackId, direction) {
+  const track = document.getElementById(trackId);
+  if (!track) return null;
   const items = Array.from(track.children);
   items.forEach(item => track.appendChild(item.cloneNode(true)));
-
-  let current = 0;
   const total = items.length;
+  let current = direction === 'left' ? 0 : total;
 
-  function getItemWidth() {
-    return track.children[0].offsetWidth + 6; // width + gap
+  if (direction === 'right') {
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${total * (track.children[0].offsetWidth + 6)}px)`;
   }
 
-  function slide() {
-    current++;
-    track.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-    track.style.transform = `translateX(-${current * getItemWidth()}px)`;
-
-    // When we've scrolled through the original set, jump silently to start
-    if (current >= total) {
-      setTimeout(() => {
-        track.style.transition = 'none';
-        current = 0;
-        track.style.transform = `translateX(0)`;
-      }, 620);
+  return function slide() {
+    const itemWidth = track.children[0].offsetWidth + 6;
+    if (direction === 'left') {
+      current++;
+      track.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+      track.style.transform = `translateX(-${current * itemWidth}px)`;
+      if (current >= total) {
+        setTimeout(() => {
+          track.style.transition = 'none';
+          current = 0;
+          track.style.transform = `translateX(0)`;
+        }, 620);
+      }
+    } else {
+      current--;
+      track.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+      track.style.transform = `translateX(-${current * itemWidth}px)`;
+      if (current <= 0) {
+        setTimeout(() => {
+          track.style.transition = 'none';
+          current = total;
+          track.style.transform = `translateX(-${total * itemWidth}px)`;
+        }, 620);
+      }
     }
-  }
+  };
+}
 
-  setInterval(slide, 2000);
-})();
+const slideHair = makeCarousel('galleryTrack', 'left');
+const slideNails = makeCarousel('nailsTrack', 'right');
+
+setInterval(() => {
+  if (slideHair) slideHair();
+  if (slideNails) slideNails();
+}, 2000);
 </script>
 </body>
 </html>
