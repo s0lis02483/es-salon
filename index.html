@@ -385,18 +385,29 @@
     gap: 1rem;
   }
 
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 3px;
+  .gallery-carousel {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .gallery-track {
+    display: flex;
+    gap: 6px;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
   }
 
   .gallery-item {
+    flex: 0 0 calc(25% - 5px);
     overflow: hidden;
     position: relative;
     background: var(--cream);
     cursor: pointer;
     aspect-ratio: 3 / 4;
+  }
+
+  @media (max-width: 768px) {
+    .gallery-item { flex: 0 0 calc(50% - 3px); }
   }
 
   .gallery-ph {
@@ -959,38 +970,16 @@
     </div>
     <a href="#booking" class="btn-outline" style="color: var(--navy); border-color: rgba(0,0,0,0.15);">Rezerviraj termin</a>
   </div>
-  <div class="gallery-grid reveal" style="transition-delay: 0.1s">
-    <div class="gallery-item">
-      <img src="gallery-1.png" alt="Rožnato barvanje las">
-
-    </div>
-    <div class="gallery-item">
-      <img src="gallery-2.png" alt="Balayage highlights">
-
-    </div>
-    <div class="gallery-item">
-      <img src="gallery-3.png" alt="Ravni las z odtenki">
-
-    </div>
-    <div class="gallery-item">
-      <img src="gallery-4.png" alt="Sivo blond kodranje">
-
-    </div>
-    <div class="gallery-item">
-      <img src="gallery-6.png" alt="Frizerski salon">
-
-    </div>
-    <div class="gallery-item">
-      <img src="gallery-5.png" alt="Frizerski salon">
-
-    </div>
-    <div class="gallery-item">
-      <img src="gallery-7.png" alt="Frizerski salon">
-
-    </div>
-    <div class="gallery-item">
-      <img src="gallery-8.png" alt="Frizerski salon">
-
+  <div class="gallery-carousel reveal" style="transition-delay: 0.1s">
+    <div class="gallery-track" id="galleryTrack">
+      <div class="gallery-item"><img src="gallery-1.png" alt="Rožnato barvanje las"></div>
+      <div class="gallery-item"><img src="gallery-2.png" alt="Balayage highlights"></div>
+      <div class="gallery-item"><img src="gallery-3.png" alt="Ravni las z odtenki"></div>
+      <div class="gallery-item"><img src="gallery-4.png" alt="Sivo blond kodranje"></div>
+      <div class="gallery-item"><img src="gallery-6.png" alt="Frizerski salon"></div>
+      <div class="gallery-item"><img src="gallery-5.png" alt="Frizerski salon"></div>
+      <div class="gallery-item"><img src="gallery-7.png" alt="Frizerski salon"></div>
+      <div class="gallery-item"><img src="gallery-8.png" alt="Frizerski salon"></div>
     </div>
   </div>
 </section>
@@ -1245,6 +1234,40 @@ function resetBooking() {
   const nb = document.getElementById('nextBtn1');
   nb.disabled = true; nb.style.opacity = '0.4';
 }
+
+// ── GALLERY CAROUSEL ──
+(function() {
+  const track = document.getElementById('galleryTrack');
+  if (!track) return;
+
+  // Clone all items for infinite loop
+  const items = Array.from(track.children);
+  items.forEach(item => track.appendChild(item.cloneNode(true)));
+
+  let current = 0;
+  const total = items.length;
+
+  function getItemWidth() {
+    return track.children[0].offsetWidth + 6; // width + gap
+  }
+
+  function slide() {
+    current++;
+    track.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+    track.style.transform = `translateX(-${current * getItemWidth()}px)`;
+
+    // When we've scrolled through the original set, jump silently to start
+    if (current >= total) {
+      setTimeout(() => {
+        track.style.transition = 'none';
+        current = 0;
+        track.style.transform = `translateX(0)`;
+      }, 620);
+    }
+  }
+
+  setInterval(slide, 2000);
+})();
 </script>
 </body>
 </html>
